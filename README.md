@@ -1,3 +1,4 @@
+This fork adds support for NT35510 in 8bit mode wit XT2046 touch chip via SPI, for the ESP32 Lolin or Dev Kit.
 
 # News
 1. A companion library [U8g2_for_TFT_eSPI](https://github.com/Bodmer/U8g2_for_TFT_eSPI) has been created to allow U8g2 library fonts to be used with TFT_eSPI.
