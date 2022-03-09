@@ -133,7 +133,7 @@ uint8_t TFT_eSPI::validTouch(uint16_t *x, uint16_t *y, uint16_t threshold){
   {
     z2 = z1;
     z1 = getTouchRawZ();
-    delay(1);
+    vTaskDelay(1 / portTICK_RATE_MS);
   }
 
   //  Serial.print("Z = ");Serial.println(z1);
@@ -145,10 +145,10 @@ uint8_t TFT_eSPI::validTouch(uint16_t *x, uint16_t *y, uint16_t threshold){
   //  Serial.print("Sample 1 x,y = "); Serial.print(x_tmp);Serial.print(",");Serial.print(y_tmp);
   //  Serial.print(", Z = ");Serial.println(z1);
 
-  delay(1); // Small delay to the next sample
+  vTaskDelay(1 / portTICK_RATE_MS); // Small delay to the next sample
   if (getTouchRawZ() <= threshold) return false;
 
-  delay(2); // Small delay to the next sample
+  vTaskDelay(2 / portTICK_RATE_MS); // Small delay to the next sample
   getTouchRaw(&x_tmp2,&y_tmp2);
   
   //  Serial.print("Sample 2 x,y = "); Serial.print(x_tmp2);Serial.print(",");Serial.println(y_tmp2);
@@ -265,7 +265,7 @@ void TFT_eSPI::calibrateTouch(uint16_t *parameters, uint32_t color_fg, uint32_t 
       }
 
     // user has to get the chance to release
-    if(i>0) delay(1000);
+    if(i>0) vTaskDelay(1000 / portTICK_RATE_MS);
 
     for(uint8_t j= 0; j<8; j++){
       // Use a lower detect threshold as corners tend to be less sensitive

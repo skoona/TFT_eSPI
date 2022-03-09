@@ -340,9 +340,9 @@ void TFT_eSPI::init(uint8_t tc)
 #ifdef TFT_RST
   if (TFT_RST >= 0) {
     digitalWrite(TFT_RST, HIGH);
-    delay(5);
+    vTaskDelay(pdMS_TO_TICKS(5));
     digitalWrite(TFT_RST, LOW);
-    delay(20);
+    vTaskDelay(pdMS_TO_TICKS(20));
     digitalWrite(TFT_RST, HIGH);
   }
   else writecommand(TFT_SWRST); // Software reset
@@ -352,7 +352,8 @@ void TFT_eSPI::init(uint8_t tc)
 
   end_tft_write();
 
-  delay(150); // Wait for reset to complete
+  // Wait for reset to complete
+  vTaskDelay(pdMS_TO_TICKS(150));
 
   begin_tft_write();
 
@@ -489,7 +490,9 @@ void TFT_eSPI::setRotation(uint8_t m)
 
 #endif
 
-  delayMicroseconds(10);
+  // delayMicroseconds(10);
+  
+  vTaskDelay(pdMS_TO_TICKS(1));
 
   end_tft_write();
 
@@ -546,7 +549,7 @@ void TFT_eSPI::commandList (const uint8_t *addr)
     if (ms)
     {
       ms = pgm_read_byte(addr++);        // Read post-command delay time (ms)
-      delay( (ms==255 ? 500 : ms) );
+      vTaskDelay(pdMS_TO_TICKS((ms==255 ? 500 : ms)));    
     }
   }
 
