@@ -345,10 +345,11 @@ void TFT_eSPI::init(uint8_t tc)
     vTaskDelay(pdMS_TO_TICKS(20));
     digitalWrite(TFT_RST, HIGH);
   }
-  else writecommand(TFT_SWRST); // Software reset
+  else writecommand(Byte8L(TFT_SWRST)); // Software reset
 #else
   writecommand(TFT_SWRST); // Software reset
 #endif
+
 
   end_tft_write();
 
