@@ -21,6 +21,9 @@ inline void TFT_eSPI::begin_touch_read_write(void){
   if (oneTime < 1)
   {
     spi.begin(TOUCH_SCLK, TOUCH_MISO, TOUCH_MOSI, TOUCH_CS);
+    pinMode(_irq_pin, INPUT_PULLUP);
+    powerDown();
+    
     oneTime = 1;
   }
 #endif
@@ -129,11 +132,17 @@ uint8_t TFT_eSPI::validTouch(uint16_t *x, uint16_t *y, uint16_t threshold){
   // Wait until pressure stops increasing to debounce pressure
   uint16_t z1 = 1;
   uint16_t z2 = 0;
+
+  if (!isTouching())
+  {
+    return false;
+  }
+
   while (z1 > z2)
   {
     z2 = z1;
     z1 = getTouchRawZ();
-    vTaskDelay(1 / portTICK_RATE_MS);
+    vTaskDelay(pdMS_TO_TICKS(1));
   }
 
   //  Serial.print("Z = ");Serial.println(z1);
@@ -145,10 +154,10 @@ uint8_t TFT_eSPI::validTouch(uint16_t *x, uint16_t *y, uint16_t threshold){
   //  Serial.print("Sample 1 x,y = "); Serial.print(x_tmp);Serial.print(",");Serial.print(y_tmp);
   //  Serial.print(", Z = ");Serial.println(z1);
 
-  vTaskDelay(1 / portTICK_RATE_MS); // Small delay to the next sample
+  vTaskDelay(pdMS_TO_TICKS(1)); // Small delay to the next sample
   if (getTouchRawZ() <= threshold) return false;
 
-  vTaskDelay(2 / portTICK_RATE_MS); // Small delay to the next sample
+  vTaskDelay(pdMS_TO_TICKS(2)); // Small delay to the next sample
   getTouchRaw(&x_tmp2,&y_tmp2);
   
   //  Serial.print("Sample 2 x,y = "); Serial.print(x_tmp2);Serial.print(",");Serial.println(y_tmp2);
@@ -265,7 +274,7 @@ void TFT_eSPI::calibrateTouch(uint16_t *parameters, uint32_t color_fg, uint32_t 
       }
 
     // user has to get the chance to release
-    if(i>0) vTaskDelay(1000 / portTICK_RATE_MS);
+    if(i>0) vTaskDelay(pdMS_TO_TICKS(1000));
 
     for(uint8_t j= 0; j<8; j++){
       // Use a lower detect threshold as corners tend to be less sensitive
@@ -348,4 +357,14 @@ void TFT_eSPI::setTouch(uint16_t *parameters){
   touchCalibration_rotate = parameters[4] & 0x01;
   touchCalibration_invert_x = parameters[4] & 0x02;
   touchCalibration_invert_y = parameters[4] & 0x04;
+}
+
+void TFT_eSPI::powerDown() const
+{
+  digitalWrite(_cs_pin, LOW);
+  // Issue a throw-away read, with power-down enabled (PD{1,0} == 0b00)
+  // Otherwise, ADC is disabled
+  SPI.transfer(CTRL_HI_Y | CTRL_LO_SER);
+  SPI.transfer16(0); // Flush, just to be sure
+  digitalWrite(_cs_pin, HIGH);
 }
