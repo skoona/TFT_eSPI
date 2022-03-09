@@ -30,13 +30,13 @@
 //#define STM_PORTA_DATA_BUS
 
 // Tell the library to use 8 bit parallel mode (otherwise SPI is assumed)
-//#define TFT_PARALLEL_8_BIT
+#define TFT_PARALLEL_8_BIT
 
 // Display type -  only define if RPi display
 //#define RPI_DISPLAY_TYPE // 20MHz maximum SPI
 
 // Only define one driver, the other ones must be commented out
-#define ILI9341_DRIVER
+// #define ILI9341_DRIVER
 //#define ST7735_DRIVER      // Define additional parameters below for this display
 //#define ILI9163_DRIVER     // Define additional parameters below for this display
 //#define S6D02A1_DRIVER
@@ -50,6 +50,7 @@
 //#define R61581_DRIVER
 //#define RM68140_DRIVER
 //#define ST7796_DRIVER
+#define NT35510_DRIVER
 
 // Some displays support SPI reads via the MISO pin, other displays have a single
 // bi-directional SDA pin and the library will try to read this via the MOSI line.
@@ -150,9 +151,9 @@
 // ###### EDIT THE PIN NUMBERS IN THE LINES FOLLOWING TO SUIT YOUR ESP8266 SETUP ######
 
 // For NodeMCU - use pin numbers in the form PIN_Dx where Dx is the NodeMCU pin designation
-#define TFT_CS   PIN_D8  // Chip select control pin D8
-#define TFT_DC   PIN_D3  // Data Command control pin
-#define TFT_RST  PIN_D4  // Reset pin (could connect to NodeMCU RST, see next line)
+// #define TFT_CS   PIN_D8  // Chip select control pin D8
+// #define TFT_DC   PIN_D3  // Data Command control pin
+// #define TFT_RST  PIN_D4  // Reset pin (could connect to NodeMCU RST, see next line)
 //#define TFT_RST  -1    // Set TFT_RST to -1 if the display RESET is connected to NodeMCU RST or 3.3V
 
 //#define TFT_BL PIN_D1  // LED back-light (only for ST7789 with backlight control pin)
@@ -261,6 +262,49 @@
 //#define TFT_RST  -1   // Set TFT_RST to -1 if the display RESET is connected to processor reset
                         // Use an Arduino pin for initial testing as connecting to processor reset
                         // may not work (pulse too short at power up?)
+
+/*
+ *   ALTERNATE WIRING For ESP32 Lolin or Dev kit with NT35510 8Bit and XPT2046 SPI
+*/
+
+// Tell the library to use 8 bit parallel mode (otherwise SPI is assumed)
+//#define TFT_PARALLEL_8_BIT
+
+// The ESP32 and TFT the pins used for testing are:
+#define TFT_CS 33  // Chip select control pin (library pulls permanently low
+#define TFT_DC 15  // Data Command control pin - must use a pin in the range 0-31
+#define TFT_RST 32 // Reset pin, toggles on startup
+
+#define TFT_WR 4  // Write strobe control pin - must use a pin in the range 0-31
+#define TFT_RD 22 // Read strobe control pin
+
+#define TFT_D0 12 // Must use pins in the range 0-31 for the data bus
+#define TFT_D1 13 // so a single register write sets/clears all bits.
+#define TFT_D2 14 // Pins can be randomly assigned, this does not affect
+#define TFT_D3 16 // TFT screen update performance.
+#define TFT_D4 17
+#define TFT_D5 25
+#define TFT_D6 26
+#define TFT_D7 27
+
+#define TOUCH_CS 5 // Chip select pin (T_CS) of touch screen
+#define TOUCH_MOSI 23
+#define TOUCH_MISO 19
+#define TOUCH_SCLK 18
+#define TOUCH_CS 5
+#define TOUCH_IRQ 21
+
+// VSPI_TOUCH_MOSI  23
+// VSPI_TOUCH_MISO  19
+// VSPI_TOUCH_CLK   18
+// VSPI_TOUCH_CS     5
+// VSPI_TOUCH_IRQ   21
+
+// HSPI_TOUCH_MOSI  13
+// HSPI_TOUCH_MISO  12
+// HSPI_TOUCH_CLK   14
+// HSPI_TOUCH_CS    15
+// HSPI_TOUCH_IRQ   21
 
 // ##################################################################################
 //

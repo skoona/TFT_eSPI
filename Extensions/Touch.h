@@ -17,8 +17,12 @@
            // Set the screen calibration values
   void     setTouch(uint16_t *data);
 
- private:
-           // Legacy support only - deprecated TODO: delete
+#if defined(TFT_PARALLEL_8_BIT) && defined(TOUCH_CS)
+  SPIClass spi = SPIClass(VSPI);
+#endif
+
+  private:
+  // Legacy support only - deprecated TODO: delete
   void     spi_begin_touch();
   void     spi_end_touch();
 
