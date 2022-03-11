@@ -291,7 +291,6 @@
 #define TOUCH_MOSI 23
 #define TOUCH_MISO 19
 #define TOUCH_SCLK 18
-#define TOUCH_CS 5
 #define TOUCH_IRQ 4
 
 // VSPI_TOUCH_MOSI  23
