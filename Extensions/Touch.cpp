@@ -278,7 +278,7 @@ void TFT_eSPI::calibrateTouch(uint16_t *parameters, uint32_t color_fg, uint32_t 
 
     for(uint8_t j= 0; j<8; j++){
       // Use a lower detect threshold as corners tend to be less sensitive
-      while(!validTouch(&x_tmp, &y_tmp, Z_THRESHOLD/2));
+      while(!validTouch(&x_tmp, &y_tmp, Z_THRESHOLD/4));
       values[i*2  ] += x_tmp;
       values[i*2+1] += y_tmp;
       }
