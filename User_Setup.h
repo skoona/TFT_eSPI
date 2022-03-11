@@ -275,7 +275,7 @@
 #define TFT_DC 15  // Data Command control pin - must use a pin in the range 0-31
 #define TFT_RST 32 // Reset pin, toggles on startup
 
-#define TFT_WR 4  // Write strobe control pin - must use a pin in the range 0-31
+#define TFT_WR 21  // Write strobe control pin - must use a pin in the range 0-31
 #define TFT_RD 22 // Read strobe control pin
 
 #define TFT_D0 12 // Must use pins in the range 0-31 for the data bus
@@ -292,7 +292,7 @@
 #define TOUCH_MISO 19
 #define TOUCH_SCLK 18
 #define TOUCH_CS 5
-#define TOUCH_IRQ 21
+#define TOUCH_IRQ 4
 
 // VSPI_TOUCH_MOSI  23
 // VSPI_TOUCH_MISO  19
